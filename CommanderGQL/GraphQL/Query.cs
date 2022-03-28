@@ -1,15 +1,30 @@
+using System.Linq;
 using CommanderGQL.Data;
 using CommanderGQL.Models;
-using System.Linq;
 using HotChocolate;
+using HotChocolate.Data;
 
 namespace CommanderGQL.GraphQL
 {
+    [GraphQLDescription("Represents the queries available.")]
     public class Query
     {
-        public IQueryable<Platform> GetPlatform([Service] AppDbContext context)
+        [UseDbContext(typeof(AppDbContext))]
+        [UseFiltering]
+        [UseSorting]
+        [GraphQLDescription("Gets the queryable platform.")]
+        public IQueryable<Platform> GetPlatform([ScopedService] AppDbContext context)
         {
             return context.Platforms;
+        }
+
+        [UseDbContext(typeof(AppDbContext))]
+        [UseFiltering]
+        [UseSorting]
+        [GraphQLDescription("Gets the queryable command.")]
+        public IQueryable<Command> GetCommand([ScopedService] AppDbContext context)
+        {
+            return context.Commands;
         }
     }
 }
